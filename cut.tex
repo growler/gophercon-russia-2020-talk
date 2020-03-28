@@ -1,0 +1,103 @@
+% Presentation for my talk at GopherCon Russia 2020
+%
+% (c) Alexey Naidyonov 2020
+% License CC-BY 3.0
+%
+\documentclass[
+  11pt, aspectratio=1610,pdf,hyperref={unicode,colorlinks=false}
+]{beamer}
+\usetheme{gophercon}
+\usepackage{pgfpages}
+\usepackage[1080p]{itoolabs-graphics}
+\usepackage{array}
+\usepackage{tcolorbox}
+
+\title{
+  TLA+ Tools: \\
+  практичный инструмент \\ 
+  формальной верификации алгоритмов
+}
+\subtitle{
+  (или что ещё разработчику на Golang точно\\надо изучить во время карантина)
+}
+\institute[\href{https://itoolabs.com}{itoolabs.com}]{%
+  \href{https://itoolabs.com}{ITooLabs}}
+\author[\href{https://twitter.com/growler}{@growler}]{%
+  \href{https://twitter.com/growler}{Alexey Naidyonov}}
+\event{\href{https://www.gophercon-russia.ru}{GopherCon Russia 2020}}
+\date[28.03.2020]{Mar 28 2020}
+\eventlogo{\includegraphics[keepaspectratio,width=.15\paperwidth]{gophercon-logo.png}}
+
+\definecolor{shellbgcolor}{rgb}{1,0.99,0.96}
+
+\begin{document}
+
+\begingroup
+\def\ident#1{\text{\small\itshape #1}}%
+\def\str#1{\text{\small #1}}%
+\def\cmd#1{\text{\small\sc #1}}%
+\def\scmd#1{\textbackslash\relax#1}%
+% Множества
+\renewcommand*{\arraystretch}{1.2}
+\begin{frame}[t,fragile]
+  \centering{\Large\bf Sets (Множества)\\}\strut\\%
+  \begin{tabular}{>{\begingroup\ttfamily\small}l<{\endgroup}@{\hspace{2ex}}>{\(}l<{\)}}
+    Procs == \{1, 5, 8\}                       & \ident{Procs} \triangleq \{1, 5, 8\}\\
+    Cardinality(Procs) = 3                     & \str{Cardinality}(\ident{Procs}) = 3\pause\\
+    Ops == \{"inc", "dec"\}                    & \ident{Ops} \triangleq \{"\str{inc}", "\str{dec}"\}\pause\\
+    Cmd == Ops \scmd{union} \{NULL\}           & \ident{Cmd} \triangleq \ident{Ops} \cup \{\ident{NULL}\}\\
+    \{1, 2\} \scmd{intersect} \{2, 3\} = \{2\} & \{1, 2\} \cap \{2, 3\} = \{2\}\pause\\
+    Var \scmd{in} 1..10                        & \ident{Var} \in 1..10\\
+    ASSUME Var \scmd{notin} Procs              & \cmd{assume}\:\ident{Var} \notin \ident{Procs}\pause\\
+    TRUE \scmd{in} BOOLEAN                     & \cmd{true} \in \cmd{boolean}\\
+    "string" \scmd{in} STRING                  & ``\str{string}'' \in \cmd{string}\pause\\
+    UNION \{\{1, 2\}, \{2, 3\}\} = \{1, 2, 3\} & \cmd{union}\:\{\{1, 2\}, \{2, 3\}\} = \{1, 2, 3\}
+  \end{tabular}    
+\end{frame}
+
+\begin{frame}[t,fragile]
+  \centering{\Large\bf Tuples (Кортежи)\\}\strut\\%
+  \begin{tabular}{>{\ttfamily\small}l<{}@{\hspace{2ex}}>{\(}l<{\)}}
+    a == <<1, 5, 8>>                           & \ident{a} \triangleq \langle 1, 5, 8\rangle \\
+    a[2] = 5                                   & \ident{a}[2] = 5\pause\\
+    Len(a) = 3                                 & \str{Len}(\ident{a}) = 3\\
+    Head(a) = 1                                & \str{Head}(\ident{a}) = 1\\
+    Tail(a) = <<5, 8>>                         & \str{Tail}(\ident{a}) = \langle 5, 8\rangle\\
+    SubSeq(a, 1, 2) = <<1, 5>>                 & \str{SubSeq}(\ident{a}, 1, 2) = \langle 1, 5\rangle\pause\\
+    <<1, 2>> \scmd{o} <<4, 8>> = <<1, 2, 4, 8>>& \langle 1, 2\rangle \circ \langle 4, 8\rangle = \langle 1, 2, 4, 8\rangle\\
+    a := Append(a, 5)                          & \ident{a}' = \str{Append}(\ident{a}, 5)\pause\\
+    a[i] := i                                  & \ident{a}' = [\ident{a}\:\cmd{except}\:![\ident{i}] = \ident{i}]\\
+  \end{tabular}    
+\end{frame}
+
+\begin{frame}[t,fragile]
+  \centering{\Large\bf Records (Записи)\\}\strut\\%
+  \begin{tabular}{>{\ttfamily\small}l<{}@{\hspace{2ex}}>{\(}l<{\)}}
+    s == [rdy|->0, ack|->0, val|->0]       & \ident{s} \triangleq [\str{rdy}\mapsto 0, \str{ack}\mapsto 0, \str{val}\mapsto 0]\\
+    s.rdy = 0                              & \ident{s}.\str{rdy} = 0\\
+    s["ack"] = 0                           & \ident{s}[``\str{ack}''] = 0\pause\\
+    "a" :> 1 = [a|->1]                     & ``\str{a}'' :> 1 = [\str{a}\mapsto 1]\\\relax
+    [a|->1] @@ [b|->2] = [a|->1, b|->2]    & [\str{a}\mapsto 1]\:@@\:[\str{b}\mapsto 2] = [\str{a}\mapsto 1, \str{b}\mapsto 2]\pause\\
+    s.ack := 1                             & \ident{s}' = [\ident{s}\:\cmd{except}\:!.\str{ack} = 1]\\
+    p.a := p.b || p.b = p.a                & \ident{p}' = [\ident{p}\:\cmd{except}\:!.\str{a} = \ident{p}.\str{b},\:!.\str{b} = \ident{p}.\str{a}]\\
+  \end{tabular}    
+\end{frame}
+
+\begin{frame}[c,fragile]
+  \centering{\Large\bf Functions (Функции)\\}\strut\\%
+  \begin{tabular}{>{\ttfamily\small}l<{}@{\hspace{2ex}}>{\(}l<{\)}}
+    Squares == [n \scmd{in} 1..Nat |-> n * n] & \ident{Squares} \triangleq [\ident{n} \in 1..\ident{Nat}\mapsto \ident{n}\cdot \ident{n}]\\
+    Squares[2] = 4                         & \ident{Squares}[2] = 4\\
+    DOMAIN Squares = 1..Nat                & \cmd{domain}\:\ident{Squares} = 1\dots\ident{Nat}\pause\\
+    s == [rdy|->0, ack|->0, val|->0]       & \ident{s} \triangleq [\str{rdy}\mapsto 0, \str{ack}\mapsto 0, \str{val}\mapsto 0]\\
+    DOMAIN s = \{"ack", "rdy", "val"\}     & \cmd{domain}\:\ident{s} = \{``\str{ack}'', ``\str{rdy}'', ``\str{val}''\}\pause\\
+    DOMAIN <<5, 6, 7>> = 1..3              & \cmd{domain}\:\langle5, 6, 7\rangle = 1\dots 3\\         
+  \end{tabular}
+\end{frame}
+\endgroup
+
+\end{document}
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

@@ -1,0 +1,325 @@
+%% ---------------------------------------------------------------------------
+%% ITooLans Beamer Theme for talks and presentations
+%% (c) ITooLabs 2016-2018
+%% ---------------------------------------------------------------------------
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{gophercon}[2020/03/10 v0.1 Beamer theme for Gophercon]
+
+\mode
+<presentation>
+
+% used packages
+
+\RequirePackage{keyval}
+\RequirePackage{pgfopts}
+\RequirePackage{pgfpages}
+\RequirePackage{etoolbox}
+\RequirePackage{pdftexcmds}
+
+\RequirePackage{polyglossia}
+\setmainlanguage{russian}
+\setotherlanguage{english}
+
+\RequirePackage[none]{hyphenat}
+
+\RequirePackage{listliketab}
+\RequirePackage{multicol}
+\raggedcolumns
+
+\RequirePackage{fancyvrb}
+\RequirePackage{fvextra}
+
+\RequirePackage{calc}
+\RequirePackage{tikz}
+\RequirePackage{xcolor}
+\RequirePackage{graphicx}
+\RequirePackage{tcolorbox}
+
+\usetikzlibrary{
+  calc, automata, shapes, arrows, backgrounds,
+  angles, positioning, intersections, quotes
+}
+
+% from https://tex.stackexchange.com/questions/146908/beamer-overlay-specifications-for-a-tikzpicture
+\tikzset{
+  invisible/.style={opacity=0,text opacity=0},
+  visible on/.style={alt={#1{}{invisible}}},
+  alt/.code args={<#1>#2#3}{%
+    \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+  },
+}
+
+% dot colors
+\definecolor{1}{HTML}{D3D3D3} % #d3d3d3
+\definecolor{2}{HTML}{1F78B4} % #1f78b4
+\definecolor{3}{HTML}{B2DF8A} % #b2df8a
+
+\definecolor{links}{HTML}{1A0DAB}
+\setbeamercolor{structure}{fg=black}
+
+\RequirePackage{relsize}
+\RequirePackage{fontspec}
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+\RequirePackage{mathtools}
+\RequirePackage{ulem}
+\RequirePackage{unicode-math}
+\RequirePackage{lualatex-math}
+
+% \usepackage[sfdefault]{FiraSans}
+% \usepackage{FiraMono}
+\setsansfont[%
+  Numbers=Monospaced,
+  ItalicFont={Fira Sans Book Italic},%
+  BoldFont={Fira Sans Medium},%
+  BoldItalicFont={Fira Sans Medium Italic}%
+]{Fira Sans Book}%
+\setmonofont[BoldFont={Fira Code Medium}]{Fira Code Regular}%
+\newfontfamily{\cyrillicfonttt}[BoldFont={Fira Code Medium}]{Fira Code Regular}
+
+%\unimathsetup{math-style=ISO, bold-style=ISO, mathrm=sym}
+%\setmathfont{Fira Math Regular}
+%\renewcommand{\triangleq}{\mathrel{\overset{\relsize{-2}\Delta}{=}}}
+
+\usefonttheme{professionalfonts}
+
+% from tlatex.sty
+
+\newlength{\charwidth}\settowidth{\charwidth}{{\small\tt M}}
+\newlength{\boxrulewd}\setlength{\boxrulewd}{.4pt}
+\newlength{\boxlineht}\setlength{\boxlineht}{.5\baselineskip}
+\newcommand{\boxsep}{\charwidth}
+\newlength{\boxruleht}\setlength{\boxruleht}{.5ex}
+\newlength{\boxruledp}\setlength{\boxruledp}{-\boxruleht}
+\addtolength{\boxruledp}{\boxrulewd}
+\newcommand{\boxrule}{\leaders\hrule height \boxruleht depth \boxruledp
+                      \hfill\mbox{}}
+\newcommand{\@computerule}{%
+  \setlength{\boxruleht}{.5ex}%
+  \setlength{\boxruledp}{-\boxruleht}%
+  \addtolength{\boxruledp}{\boxrulewd}}
+
+\newcommand{\bottombar}{\hspace{-\boxsep}%
+  \raisebox{-\boxrulewd}[0pt][0pt]{\rule[.5ex]{\boxrulewd}{\boxlineht}}%
+  \boxrule
+  \raisebox{-\boxrulewd}[0pt][0pt]{%
+      \rule[.5ex]{\boxrulewd}{\boxlineht}}\hspace{-\boxsep}\vspace{0pt}}
+
+\newcommand{\moduleLeftDash}%
+   {\hspace*{-\boxsep}%
+     \raisebox{-\boxlineht}[0pt][0pt]{\rule[.5ex]{\boxrulewd
+               }{\boxlineht}}%
+    \boxrule\hspace*{.4em }}
+
+\newcommand{\moduleRightDash}%
+    {\hspace*{.4em}\boxrule
+    \raisebox{-\boxlineht}[0pt][0pt]{\rule[.5ex]{\boxrulewd
+               }{\boxlineht}}\hspace{-\boxsep}}%\vspace{.2em}
+%
+
+\RequirePackage[outputdir=\outputdir]{minted}
+\RequirePackage{mdframed}
+
+\colorlet{mintedhighlight}{white!85!yellow}
+\newcommand{\inputcode}[3][]{%
+  \begin{mdframed}[innerleftmargin=3pt, linewidth=0.5pt, linecolor=black!95, hidealllines=true, leftline=true]%
+    \inputminted[highlightcolor=mintedhighlight, breaklines, tabsize=4, numbersep=6pt, linenos,#1]{#2}{#3}%
+  \end{mdframed}%
+}
+
+\newenvironment{code}[2][]
+{\VerbatimEnvironment%
+ \begin{mdframed}[innerleftmargin=3pt, linewidth=0.5pt, linecolor=black!95, hidealllines=true, leftline=true]%
+    \begin{minted}[highlightcolor=mintedhighlight, breaklines, autogobble, tabsize=4, numbersep=6pt, linenos, #1]{#2}}%
+   {\end{minted}%
+ \end{mdframed}%
+}%
+
+\renewcommand{\theFancyVerbLine}{\ttfamily \textcolor{black!40}{\tiny \arabic{FancyVerbLine}}}
+
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\RequirePackage{pifont}
+
+\useinnertheme{default}
+\useoutertheme{default}
+
+\setbeamertemplate{navigation symbols}{}
+
+\setbeamerfont{title}{size=\Large,series=\bfseries}
+\setbeamerfont{frametitle}{size=\Large,series=\bfseries}
+\setbeamerfont{author}{size=\small}
+\setbeamerfont{date}{size=\small}
+\setbeamerfont{title event name}{size=\small}
+\setbeamerfont{institute}{size=\small}
+
+\setbeamersize{text margin left=.05\paperwidth}
+\setbeamersize{text margin right=.05\paperwidth}
+
+\def\beamerleftmargin{\dimexpr\Gm@lmargin\relax}
+\def\beamerrightmargin{\dimexpr\Gm@rmargin\relax}
+
+\setlength{\parindent}{0pt}
+
+\def\event{%
+  \@ifnextchar[\itl@events\itl@eventl%
+}
+\def\itl@events[#1]#2{%
+  \global\def\itoolabs@event@short{#1}%
+  \global\def\itoolabs@event@name{#2}%
+}
+\def\itl@eventl#1{%
+  \global\def\itoolabs@event@name{#1}%
+}
+
+\def\eventlogo#1{%
+  \global\def\itoolabs@event@logo{#1}
+}
+
+\def\inserteventshortname{%
+  \ifcsname itoolabs@event@short\endcsname\itoolabs@event@short\fi%
+}
+
+\def\inserteventname{%
+  \ifcsname itoolabs@event@name\endcsname\itoolabs@event@name\fi%
+}
+
+\def\inserteventlogo{%
+  \ifcsname itoolabs@event@logo\endcsname\itoolabs@event@logo\fi%
+}
+
+\definecolor{ITooLabsOrange}{RGB}{255,115,0}
+\setbeamertemplate{itemize item}{\textbullet}
+\setbeamertemplate{itemize subitem}{\textbullet}
+\settowidth{\leftmargini}{\usebeamertemplate{itemize item}}
+\addtolength{\leftmargini}{\labelsep}
+
+\setbeamertemplate{itemize item}{\textbullet}
+
+\setbeamertemplate{logos}{%
+  \ifx\itoolabs@event@logo\@empty\else%
+  \begin{tikzpicture}[remember picture,overlay]
+    \node at ($(current page.south west) 
+      +(\the\dimexpr \paperwidth / 5\relax,\the\dimexpr \paperheight / 3\relax) $) 
+        [anchor=center]{\inserteventlogo};
+    \node at ($(current page.south east) 
+      +(-\the\dimexpr \paperwidth / 5\relax,\the\dimexpr \paperheight / 3\relax) $) 
+        [anchor=center]{\resizebox{.25\paperwidth}{!}{\ITooLabsLogo}};
+  \end{tikzpicture}%
+  \fi%  
+}
+
+\setbeamertemplate{title page}{%
+  \usebeamertemplate*{logos}%
+  \vfill%
+  \begingroup
+    \centering%
+    \ifx\inserttitle\@empty\else\usebeamertemplate*{title}\fi%
+    \ifx\insertsubtitle\@empty\else\usebeamertemplate*{subtitle}\fi%
+    \ifx\insertevetname\@empty\else\usebeamertemplate*{title event name}\fi%
+    \ifx\beamer@shortauthor\@empty\else\usebeamertemplate*{author}\fi%
+    \ifx\insertinstitute\@empty\else\usebeamertemplate*{institute}\fi%
+    \ifx\insertdate\@empty\else\usebeamertemplate*{date}\fi%
+  \endgroup
+  \vfill%
+}
+
+\setbeamertemplate{headline}{}
+
+\setbeamercolor{author in head/foot}{fg=white!70!black}
+\setbeamercolor{page number in head/foot}{fg=white!70!black}
+
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd =.45\paperwidth, ht = 2.25ex, dp = 1ex, center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}%
+    \makebox[0.45\paperwidth]{%
+      \hspace*{3ex}\insertshortinstitute\hfill%
+    }%
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.10\paperwidth, ht = 2.25ex, dp = 1ex, right]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\makebox[0.10\paperwidth]{%
+      \hfill\insertshortauthor\hfill%
+    }%
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd =.45\paperwidth, ht = 2.25ex, dp = 1ex, center]{page number in head/foot}%
+    \usebeamerfont{date in head/foot}%
+    \makebox[0.45\paperwidth]{%
+      \hfill\insertframenumber{}\hspace*{3ex}%
+    }%
+  \end{beamercolorbox}}%
+  \vskip0pt%%
+}
+
+\setbeamertemplate{title}{%
+  \inserttitle\par%
+  \vspace*{1em}%
+}
+
+\setbeamertemplate{subtitle}{%
+  \insertsubtitle\par%
+  \vspace*{1em}%
+}
+
+\setbeamertemplate{title event name}{%
+  \inserteventname\par%
+}
+
+\setbeamertemplate{author}{
+  \insertauthor\par%
+}
+
+\setbeamertemplate{date}{
+  \insertdate\par%
+}
+
+\setbeamertemplate{institute}{
+  \insertinstitute\par%
+}
+
+% \defbeamertemplate{background canvas}{plain}{
+%   \begin{tikzpicture}%
+%     \@itoolabs@grid
+%   \end{tikzpicture}%
+% }
+
+% \setbeamertemplate{headline}{%
+%   \nointerlineskip%
+%   \begin{beamercolorbox}[wd=\paperwidth, ht=0.8cm, dp=0.2cm]{headline}%
+%     \leavevmode
+%     \hfill%
+%     \resizebox{!}{0.3cm}{}%
+%     \ifx\itoolabs@event@logo\@empty%
+%       \hspace*{1cm}%
+%     \else%
+%       \hspace*{0.3cm}%
+%       \raisebox{-0.1cm}{\resizebox{!}{0.5cm}{\inserteventlogo}}%
+%       \hspace*{0.5cm}%
+%     \fi%
+%     \end{beamercolorbox}%
+% }
+
+% \setbeamertemplate{frametitle}{%
+%   \nointerlineskip%
+%   \vspace{-1cm}%
+%   \begin{beamercolorbox}[wd=\textwidth, ht=0.8cm, dp=0.2cm]{frametitle}%
+%     \leavevmode\centering%
+%     \strut\usebeamerfont{frametitle}\insertframetitle\strut%
+%   \end{beamercolorbox}%
+%   \vskip-0.25em%
+% }
+
+\def\convertto#1#2{\strip@pt\dimexpr #2*65536/\number\dimexpr 1#1}
+
+\setbeamertemplate{page number in head/foot}[totalframenumber]
+\setbeamerfont{page number in head/foot}{size=\footnotesize}
+
+% \setbeamertemplate{sidebar left}{}
+% \setbeamertemplate{sidebar right}{}
+
+\mode
+<all>
+%%
+%% 

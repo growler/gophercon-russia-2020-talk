@@ -1,0 +1,10 @@
+*.toolbox/
+states/
+playground/
+tmp/
+.latex-cache/
+*.old
+*.out
+*.code-workspace
+slide.tex
+slide.pdf

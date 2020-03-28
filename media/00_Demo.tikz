@@ -1,0 +1,87 @@
+
+\begin{tikzpicture}[>=latex,line join=bevel,]
+  \pgfsetlinewidth{1bp}
+%%
+\begin{scope}
+  \pgfsetstrokecolor{black}
+  \definecolor{strokecol}{rgb}{1.0,1.0,1.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (8.0bp,8.0bp) -- (8.0bp,276.0bp) -- (146.0bp,276.0bp) -- (146.0bp,8.0bp) -- cycle;
+\end{scope}
+\begin{scope}
+  \pgfsetstrokecolor{black}
+  \definecolor{strokecol}{rgb}{1.0,1.0,1.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (8.0bp,8.0bp) -- (8.0bp,276.0bp) -- (146.0bp,276.0bp) -- (146.0bp,8.0bp) -- cycle;
+\end{scope}
+\begin{scope}
+  \pgfsetstrokecolor{black}
+  \definecolor{strokecol}{rgb}{1.0,1.0,1.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (8.0bp,8.0bp) -- (8.0bp,276.0bp) -- (146.0bp,276.0bp) -- (146.0bp,8.0bp) -- cycle;
+\end{scope}
+\begin{scope}
+  \pgfsetstrokecolor{black}
+  \definecolor{strokecol}{rgb}{1.0,1.0,1.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (8.0bp,8.0bp) -- (8.0bp,276.0bp) -- (146.0bp,276.0bp) -- (146.0bp,8.0bp) -- cycle;
+\end{scope}
+\begin{scope}
+  \pgfsetstrokecolor{black}
+  \definecolor{strokecol}{rgb}{1.0,1.0,1.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (8.0bp,8.0bp) -- (8.0bp,276.0bp) -- (146.0bp,276.0bp) -- (146.0bp,8.0bp) -- cycle;
+\end{scope}
+  \pgfsetcolor{black}
+  % Edge: -107664775997770560 -> -107664775997770560
+  \draw [->,dashed] (104.84bp,262.81bp) .. controls (125.69bp,265.31bp) and (145.0bp,261.04bp)  .. (145.0bp,250.0bp) .. controls (145.0bp,240.77bp) and (131.5bp,236.27bp)  .. (104.84bp,237.19bp);
+  % Edge: -107664775997770560 -> -8739362515292856379
+  \pgfsetcolor{2}
+  \draw [->] (68.0bp,231.83bp) .. controls (68.0bp,224.13bp) and (68.0bp,214.97bp)  .. (68.0bp,196.41bp);
+  % Edge: -8739362515292856379 -> -8739362515292856379
+  \pgfsetcolor{black}
+  \draw [->,dashed] (104.84bp,190.81bp) .. controls (125.69bp,193.31bp) and (145.0bp,189.04bp)  .. (145.0bp,178.0bp) .. controls (145.0bp,168.77bp) and (131.5bp,164.27bp)  .. (104.84bp,165.19bp);
+  % Edge: -8739362515292856379 -> 1075403382720062154
+  \pgfsetcolor{2}
+  \draw [->] (68.0bp,159.83bp) .. controls (68.0bp,152.13bp) and (68.0bp,142.97bp)  .. (68.0bp,124.41bp);
+  % Edge: 1075403382720062154 -> 1075403382720062154
+  \pgfsetcolor{black}
+  \draw [->,dashed] (104.84bp,118.81bp) .. controls (125.69bp,121.31bp) and (145.0bp,117.04bp)  .. (145.0bp,106.0bp) .. controls (145.0bp,96.772bp) and (131.5bp,92.275bp)  .. (104.84bp,93.193bp);
+  % Edge: 1075403382720062154 -> 8564275020137105871
+  \pgfsetcolor{2}
+  \draw [->] (68.0bp,87.831bp) .. controls (68.0bp,80.131bp) and (68.0bp,70.974bp)  .. (68.0bp,52.413bp);
+  % Edge: 8564275020137105871 -> 8564275020137105871
+  \draw [->,dashed] (104.84bp,46.807bp) .. controls (125.69bp,49.308bp) and (145.0bp,45.039bp)  .. (145.0bp,34.0bp) .. controls (145.0bp,24.772bp) and (131.5bp,20.275bp)  .. (104.84bp,21.193bp);
+  % Node: -107664775997770560
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \definecolor{fillcol}{rgb}{0.83,0.83,0.83};
+  \pgfsetfillcolor{fillcol}
+  \filldraw [opacity=1] (68.0bp,250.0bp) ellipse (51.99bp and 18.0bp);
+  \draw (68.0bp,250.0bp) node {counter = 0};
+\end{scope}
+  % Node: -8739362515292856379
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (68.0bp,178.0bp) ellipse (51.99bp and 18.0bp);
+  \draw (68.0bp,178.0bp) node {counter = 1};
+\end{scope}
+  % Node: 1075403382720062154
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (68.0bp,106.0bp) ellipse (51.99bp and 18.0bp);
+  \draw (68.0bp,106.0bp) node {counter = 2};
+\end{scope}
+  % Node: 8564275020137105871
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (68.0bp,34.0bp) ellipse (51.99bp and 18.0bp);
+  \draw (68.0bp,34.0bp) node {counter = 3};
+\end{scope}
+%
+\end{tikzpicture}
+

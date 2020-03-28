@@ -1,0 +1,288 @@
+%% ---------------------------------------------------------------------------
+%% ITooLabs Beamer Theme for talks and presentations
+%% (c) ITooLabs 2016-2018
+%% ---------------------------------------------------------------------------
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{itoolabs-graphics}[2016/04/14 v0.1 ITooLabs Graphics (Logos and such)]
+
+\RequirePackage{pgfopts}
+
+\RequirePackage{graphicx}
+\RequirePackage{tikz}
+\RequirePackage{etoolbox}
+\RequirePackage{fontspec}
+\usetikzlibrary{decorations.text}
+\usetikzlibrary{patterns,calc}
+
+\expandafter\ifx\csname Gin@rule@.jp2\endcsname\relax
+\DeclareGraphicsRule{.jp2}{jpg}{.jp2}{#1}
+\DeclareGraphicsRule{.JP2}{jpg}{.JP2}{#1}
+\RequirePackage{grfext}
+\AppendGraphicsExtensions{.jp2,.JP2}
+
+\let\@old@includegraphics\includegraphics%
+\let\realincludegraphics\includegraphics%
+
+\pgfkeys{/itoolabs/.cd,
+  target resolution/.is choice,
+  target resolution/.cd,
+  720p/.code=%
+    \pgfmathparse{720 / \paperheight}\xdef\@itoolabs@dpp{\pgfmathresult}%
+    \pgfmathparse{round (\@itoolabs@dpp * 1in) }\xdef\@itoolabs@dpi{\pgfmathresult},%
+  1080p/.code=%
+    \pgfmathparse{1080 / \paperheight}\xdef\@itoolabs@dpp{\pgfmathresult}%
+    \pgfmathparse{round (\@itoolabs@dpp * 1in) }\xdef\@itoolabs@dpi{\pgfmathresult},%
+  4k/.code=%
+    \pgfmathparse{2160 / \paperheight}\xdef\@itoolabs@dpp{\pgfmathresult}%
+    \pgfmathparse{round (\@itoolabs@dpp * 1in) }\xdef\@itoolabs@dpi{\pgfmathresult},%
+    8k/.code=%
+    \pgfmathparse{4320 / \paperheight}\xdef\@itoolabs@dpp{\pgfmathresult}%
+    \pgfmathparse{round (\@itoolabs@dpp * 1in) }\xdef\@itoolabs@dpi{\pgfmathresult}%
+}
+
+\pgfkeys{/itoolabs/.cd,
+  720p/.style={target resolution=720p},
+  1080p/.style={target resolution=1080p},
+  4k/.style={target resolution=4k},
+  8k/.style={target resolution=8k},
+  720p
+}
+
+\pgfkeys{/itoolabs/includegraphics/.cd,
+  height/.code=\pgfmathsetmacro{\@itoolabs@gr@height}{ceil ((#1) * \@itoolabs@dpp) },
+  width/.code=\pgfmathsetmacro{\@itoolabs@gr@width}{ceil ((#1) * \@itoolabs@dpp) },
+  keepaspectratio/.code=\def\@itoolabs@gr@ka{1},
+  .unknown/.code=\def\@itoolabs@gr@failsafe{1}
+}%
+
+\renewcommand{\includegraphics}[2][]{%
+  \def\@itoolabs@gr@width{0}%
+  \def\@itoolabs@gr@height{0}%
+  \def\@itoolabs@gr@failsafe{0}%
+  \def\@itoolabs@gr@ka{0}%
+  \pgfkeys{/itoolabs/includegraphics/.cd,#1}%
+  \ifnum\@itoolabs@gr@failsafe=1\relax%
+     \@old@includegraphics[#1]{#2}%
+  \else%
+     \@old@includegraphics[#1]{%
+       \directlua{include_image('#2',\@itoolabs@gr@width,\@itoolabs@gr@height,\@itoolabs@gr@ka,\@itoolabs@dpi)}%
+     }%
+  \fi%
+}
+
+\newcommand{\XKCD}[2][]{%
+  \def\@itoolabs@gr@width{0}%
+  \def\@itoolabs@gr@height{0}%
+  \def\@itoolabs@gr@failsafe{0}%
+  \def\@itoolabs@gr@ka{0}%
+  \pgfkeys{/itoolabs/includegraphics/.cd,#1}%
+  \ifnum\@itoolabs@gr@failsafe=1\relax%
+     \errmessage{Invalid XKCD command parameters #1}%
+  \else%
+     \@old@includegraphics[#1]{%
+       \directlua{include_xkcd('#2',\@itoolabs@gr@width,\@itoolabs@gr@height,\@itoolabs@dpi)}%
+     }%
+  \fi%
+}
+
+\def\ig{\@ifnextchar[\@ig{\@ig[]}}
+\def\@ig[#1]#2{%
+  \pgfkeys{/itoolabs/includegraphics/.cd,#1}%
+  \directlua{new_include_image('\luaescapestring{#1}', '#2') }%
+}
+
+\directlua{dofile(kpse.find_file('itoolabs-graphics.lua'))}
+
+\newsavebox\@pdfxform@scratch@box
+
+\def\MemoizePicture#1#2{%
+  \savebox\@pdfxform@scratch@box{#2}%
+  \expandafter\xdef\csname #1@wd\endcsname{\the\wd\@pdfxform@scratch@box}%
+  \expandafter\xdef\csname #1@ht\endcsname{\the\ht\@pdfxform@scratch@box}%
+  \immediate\saveboxresource\@pdfxform@scratch@box%
+  \expandafter\xdef\csname #1@xref\endcsname{\the\lastsavedboxresourceindex\relax}%
+  \expandafter\xdef\csname #1\endcsname{\noexpand\useboxresource\expandafter\noexpand\csname #1@xref\endcsname}%
+}
+
+\def\tttt#1{
+  \pgfmathsetmacro{\s}{#1}%
+  \ifcsdef{pic\s}{%
+    \expandafter\pdfrefxform\csname pic\s\endcsname%
+  }{%
+    \sbox\bulletbox{
+    \begin{tikzpicture}[baseline]%
+      \definecolor{ITooLabsOrange}{RGB}{255,115,0}
+      \pgfmathsetmacro{\h}{\s}%
+      \pgfmathsetmacro{\w}{\s * 1.2}%
+      \pgfmathsetmacro{\t}{\s / 3}%
+      \pgfmathsetmacro{\xa}{0}%
+      \pgfmathsetmacro{\ya}{0}%
+      \pgfmathsetmacro{\xb}{\xa + \w}%
+      \pgfmathsetmacro{\tb}{\t * 2 * \w / \h}%
+      \pgfmathsetmacro{\xc}{\xb - (\t * 2 * \w / \h)}%
+      \pgfmathsetmacro{\yb}{\ya + (\h / 2)}%
+      \pgfmathsetmacro{\yc}{\ya + \h}%
+      \pgfmathsetmacro{\yd}{\yc - \t}%
+      \pgfmathsetmacro{\ye}{\ya + \t}%
+      \fill [fill=ITooLabsOrange] (\xa pt,\ya pt) -- (\xb pt, \yb pt) -- (\xa pt, \yc pt) --
+         (\xa pt, \yd pt) -- (\xc pt, \yb pt) -- (\xa pt, \ye pt) -- cycle;
+    \end{tikzpicture}%
+    }%
+    \pdfxform\bulletbox%
+    \expandafter\xdef\csname pic\s\endcsname{\the\pdflastxform}%
+    \expandafter\pdfrefxform\csname pic\s\endcsname%
+  }%
+}
+
+\def\@itoolabs@DrawCloud{%
+  \foreach \x/\y in {
+    28pt/40pt, 32pt/40pt, 20pt/36pt, 24pt/36pt, 28pt/36pt,
+    32pt/36pt, 36pt/36pt, 16pt/32pt, 20pt/32pt, 28pt/32pt,
+    36pt/32pt, 12pt/28pt, 16pt/28pt, 20pt/28pt, 28pt/28pt,
+    32pt/28pt, 40pt/28pt, 44pt/28pt, 12pt/24pt, 16pt/24pt,
+    24pt/24pt, 28pt/24pt, 32pt/24pt, 36pt/24pt, 40pt/24pt,
+    44pt/24pt, 48pt/24pt, 4pt/20pt, 8pt/20pt, 12pt/20pt,
+    20pt/20pt, 24pt/20pt, 32pt/20pt, 40pt/20pt, 48pt/20pt,
+    52pt/20pt, 56pt/20pt, 4pt/16pt, 12pt/16pt, 20pt/16pt,
+    28pt/16pt, 36pt/16pt, 40pt/16pt, 44pt/16pt, 48pt/16pt,
+    52pt/16pt, 56pt/16pt, 60pt/16pt, 0pt/12pt, 4pt/12pt,
+    8pt/12pt, 12pt/12pt, 16pt/12pt, 20pt/12pt, 24pt/12pt,
+    28pt/12pt, 32pt/12pt, 36pt/12pt, 48pt/12pt, 60pt/12pt,
+    64pt/12pt, 0pt/8pt, 8pt/8pt, 12pt/8pt, 16pt/8pt, 20pt/8pt,
+    28pt/8pt, 32pt/8pt, 40pt/8pt, 44pt/8pt, 48pt/8pt, 52pt/8pt,
+    60pt/8pt, 64pt/8pt, 4pt/4pt, 8pt/4pt, 20pt/4pt, 24pt/4pt,
+    28pt/4pt, 32pt/4pt, 36pt/4pt, 40pt/4pt, 44pt/4pt, 52pt/4pt,
+    56pt/4pt, 60pt/4pt, 12pt/0pt, 16pt/0pt, 20pt/0pt, 24pt/0pt,
+    28pt/0pt, 32pt/0pt, 36pt/0pt, 40pt/0pt, 44pt/0pt, 48pt/0pt
+  }
+  \fill (\x, \y) rectangle +(3.5 pt, 3.5pt);
+}
+
+\MemoizePicture{ITooLabsCloudWhite}{%
+  \begin{tikzpicture}[color = black!2]%
+    \@itoolabs@DrawCloud%
+  \end{tikzpicture}%
+}
+
+\MemoizePicture{ITooLabsCloudGrey}{%
+  \begin{tikzpicture}[color = black!10]%
+    \@itoolabs@DrawCloud%
+  \end{tikzpicture}%
+}
+
+\MemoizePicture{ITooLabsLogo}{
+  \definecolor{@color@ITooLabsLogoOrange}{RGB}{255,115,0}
+  \definecolor{@color@ITooLabsLogoBlack}{RGB}{0,0,0}
+  \begin{tikzpicture}[y=0.80pt, x=0.8pt,yscale=-1, inner sep=0pt, outer sep=0pt]
+    \begin{scope}[cm={{1.25,0.0,0.0,-1.25,(0.0,66.25)}}]
+      \begin{scope}[scale=0.100]
+        \path[fill=@color@ITooLabsLogoOrange,even odd rule] (2583.6100,344.5510) -- (2477.9400,344.5510)
+           .. controls (2465.3400,344.5510) and (2455.1300,334.3280) ..
+           (2455.1300,321.7300) -- (2455.1300,216.0700) .. controls (2455.1300,203.4690)
+           and (2465.3400,193.2500) .. (2477.9400,193.2500) -- (2583.6100,193.2500) ..
+           controls (2596.2100,193.2500) and (2606.4200,203.4610) .. (2606.4200,216.0700)
+           -- (2606.4200,321.7300) .. controls (2606.4200,334.3280) and
+           (2596.2100,344.5510) .. (2583.6100,344.5510);
+        \path[fill=@color@ITooLabsLogoOrange,even odd rule] (2583.6100,166.3980) -- (2477.9400,166.3980)
+           .. controls (2465.3400,166.3980) and (2455.1300,156.1910) ..
+           (2455.1300,143.5780) -- (2455.1300,37.9219) .. controls (2455.1300,25.3203)
+           and (2465.3400,15.1016) .. (2477.9400,15.1016) -- (2583.6100,15.1016) ..
+           controls (2596.2100,15.1016) and (2606.4200,25.3203) .. (2606.4200,37.9219) --
+           (2606.4200,143.5780) .. controls (2606.4200,156.1800) and (2596.2100,166.3980)
+           .. (2583.6100,166.3980);
+        \path[fill=@color@ITooLabsLogoOrange,even odd rule] (2758.9400,344.8010) -- (2653.4100,344.8010)
+           .. controls (2640.8300,344.8010) and (2630.6300,334.6020) ..
+           (2630.6300,322.0120) -- (2630.6300,216.4800) .. controls (2630.6300,203.8910)
+           and (2640.8300,193.6910) .. (2653.4100,193.6910) -- (2758.9400,193.6910) ..
+           controls (2771.5300,193.6910) and (2781.7300,203.8910) .. (2781.7300,216.4800)
+           -- (2781.7300,322.0120) .. controls (2781.7300,334.6020) and
+           (2771.5300,344.8010) .. (2758.9400,344.8010);
+        \path[fill=@color@ITooLabsLogoOrange,even odd rule] (2408.2300,520.0590) -- (2302.4200,520.0590)
+           .. controls (2289.8000,520.0590) and (2279.5700,509.8280) ..
+           (2279.5700,497.2110) -- (2279.5700,391.3980) .. controls (2279.5700,378.7810)
+           and (2289.8000,368.5510) .. (2302.4200,368.5510) -- (2408.2300,368.5510) ..
+           controls (2420.8500,368.5510) and (2431.0800,378.7810) .. (2431.0800,391.3980)
+           -- (2431.0800,497.2110) .. controls (2431.0800,509.8280) and
+           (2420.8500,520.0590) .. (2408.2300,520.0590);
+        \path[fill=@color@ITooLabsLogoOrange,even odd rule] (2303.6800,15.0000) -- (2409.4900,15.0000) ..
+           controls (2422.1100,15.0000) and (2432.3400,25.2305) .. (2432.3400,37.8516) --
+           (2432.3400,143.6600) .. controls (2432.3400,156.2810) and (2422.1100,166.5120)
+           .. (2409.4900,166.5120) -- (2303.6800,166.5120) .. controls
+           (2291.0600,166.5120) and (2280.8300,156.2810) .. (2280.8300,143.6600) --
+           (2280.8300,37.8516) .. controls (2280.8300,25.2305) and (2291.0600,15.0000) ..
+           (2303.6800,15.0000);
+        \path[fill=@color@ITooLabsLogoBlack,nonzero rule] (0.0000,15.0000) -- (44.5039,15.0000) --
+           (44.5039,344.5200) -- (0.0000,344.5200) -- (0.0000,15.0000) -- cycle;
+        \path[fill=@color@ITooLabsLogoBlack,nonzero rule] (209.6020,306.5200) -- (114.5900,306.5200) --
+           (114.5900,344.5200) -- (358.6090,344.5200) -- (345.1020,306.5200) --
+           (254.1020,306.5200) -- (254.1020,15.0000) -- (209.6020,15.0000) --
+           (209.6020,306.5200);
+        \path[fill=@color@ITooLabsLogoBlack,nonzero rule] (640.6480,178.5120) .. controls
+           (640.6480,254.0120) and (598.6480,309.5120) .. (525.6410,309.5120) .. controls
+           (456.1410,309.5120) and (410.1290,257.5120) .. (410.1290,178.5120) .. controls
+           (410.1290,99.0000) and (456.1410,48.0000) .. (525.6410,48.0000) .. controls
+           (594.6410,48.0000) and (640.6480,99.0000) .. (640.6480,178.5120) --
+           cycle(363.1410,178.5120) .. controls (363.1410,278.5120) and
+           (431.6410,347.5200) .. (525.6410,347.5200) .. controls (620.6480,347.5200) and
+           (687.6480,277.0200) .. (687.6480,178.5120) .. controls (687.6480,76.0117) and
+           (617.6480,10.0000) .. (525.6410,10.0000) .. controls (432.1410,10.0000) and
+           (363.1410,76.5000) .. (363.1410,178.5120);
+        \path[fill=@color@ITooLabsLogoBlack,nonzero rule] (1012.2500,178.5120) .. controls
+           (1012.2500,254.0120) and (970.2500,309.5120) .. (897.2500,309.5120) ..
+           controls (827.7380,309.5120) and (781.7380,257.5120) .. (781.7380,178.5120) ..
+           controls (781.7380,99.0000) and (827.7380,48.0000) .. (897.2500,48.0000) ..
+           controls (966.2500,48.0000) and (1012.2500,99.0000) .. (1012.2500,178.5120) --
+           cycle(734.7300,178.5120) .. controls (734.7300,278.5120) and
+           (803.2380,347.5200) .. (897.2380,347.5200) .. controls (992.2380,347.5200) and
+           (1059.2600,277.0200) .. (1059.2600,178.5120) .. controls (1059.2600,76.0117)
+           and (989.2380,10.0000) .. (897.2380,10.0000) .. controls (803.7300,10.0000)
+           and (734.7300,76.5000) .. (734.7300,178.5120);
+        \path[fill=@color@ITooLabsLogoBlack,nonzero rule] (1123.3800,344.5200) -- (1167.8900,344.5200) --
+           (1167.8900,53.0000) -- (1288.4000,53.0000) -- (1288.4000,15.0000) --
+           (1123.3800,15.0000) -- (1123.3800,344.5200);
+        \path[fill=@color@ITooLabsLogoBlack,nonzero rule] (1545.7900,138.0120) -- (1514.7900,224.0120) ..
+           controls (1505.2900,252.0120) and (1500.2900,267.0120) .. (1496.2900,279.0200)
+           -- (1495.2900,279.0200) .. controls (1491.7900,267.0200) and
+           (1486.2900,251.5120) .. (1476.2900,223.5120) -- (1445.2800,138.0120) --
+           (1545.7900,138.0120) -- cycle(1478.7900,345.5200) -- (1511.7900,345.5200) --
+           (1639.7900,15.0000) -- (1591.8000,15.0000) -- (1559.7900,101.5000) --
+           (1431.7800,101.5000) -- (1400.2800,15.0000) -- (1353.2800,15.0000) --
+           (1478.7900,345.5200);
+        \path[fill=@color@ITooLabsLogoBlack,nonzero rule] (1779.9800,52.0000) .. controls
+           (1822.9900,52.0000) and (1849.9800,68.5000) .. (1849.9800,109.0000) ..
+           controls (1849.9800,143.0000) and (1824.4800,164.5000) .. (1784.9800,164.5000)
+           -- (1734.4700,164.5000) -- (1734.4700,52.0000) -- (1779.9800,52.0000) --
+           cycle(1767.9800,201.5120) .. controls (1808.4800,201.5120) and
+           (1829.9800,222.0120) .. (1829.9800,255.0120) .. controls (1829.9800,285.5120)
+           and (1811.9800,307.5120) .. (1768.9800,307.5120) -- (1734.4700,307.5120) --
+           (1734.4700,201.5000) -- (1767.9800,201.5000) -- (1767.9800,201.5120) --
+           cycle(1689.9800,344.5200) -- (1772.9900,344.5200) .. controls
+           (1842.9900,344.5200) and (1874.4900,305.5200) .. (1874.4900,261.0200) ..
+           controls (1874.4900,229.0200) and (1858.4900,202.5200) .. (1831.9800,190.5200)
+           -- (1831.9800,189.5200) .. controls (1869.4900,181.0200) and
+           (1895.4900,150.0200) .. (1895.4900,109.5200) .. controls (1895.4900,55.5195)
+           and (1856.4800,15.0117) .. (1782.4800,15.0117) -- (1689.9800,15.0117) --
+           (1689.9800,344.5310);
+        \path[fill=@color@ITooLabsLogoBlack,nonzero rule] (1949.0200,70.5000) .. controls
+           (1966.0300,59.0000) and (1991.0300,48.0000) .. (2021.0300,48.0000) .. controls
+           (2054.0200,48.0000) and (2084.0200,61.0000) .. (2084.0200,96.5000) .. controls
+           (2084.0200,171.0120) and (1940.0200,162.0000) .. (1940.0200,261.0120) ..
+           controls (1940.0200,308.5120) and (1976.5200,347.5120) .. (2040.0300,347.5120)
+           .. controls (2071.0400,347.5120) and (2098.5400,339.5120) ..
+           (2114.5300,331.5120) -- (2114.5300,291.0120) .. controls (2092.0300,303.0120)
+           and (2066.5200,309.5120) .. (2041.5200,309.5120) .. controls
+           (2014.0200,309.5120) and (1986.5200,298.0120) .. (1986.5200,265.5120) ..
+           controls (1986.5200,195.5120) and (2131.0400,203.0120) .. (2131.0400,100.0000)
+           .. controls (2131.0400,44.0000) and (2085.5300,10.0000) .. (2021.5200,10.0000)
+           .. controls (1983.5300,10.0000) and (1952.0200,21.5000) .. (1930.5300,36.0000)
+           -- (1949.0200,70.5000);
+      \end{scope}
+    \end{scope}
+  \end{tikzpicture}
+}
+
+\ProcessPgfOptions{/itoolabs}
+
+\endinput
+%%
+%% End of file `itoolabs-graphics.sty'.
