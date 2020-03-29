@@ -15,8 +15,10 @@
 %\setbeameroption{show notes on second screen=right} % Both
 \setbeamertemplate{note page}{\pagecolor{yellow!5}\insertnote}
 
+\def\TLA{TLA\textsuperscript{+}}
+
 \title{
-  TLA+ Tools: \\ 
+  \TLA\ Tools: \\ 
   практичный инструмент \\ 
   формальной верификации алгоритмов
 }
@@ -194,7 +196,7 @@
         \item Bakery algorithm
         \item PAXOS
         \item LaTeX
-        \item {\bf TLA+}
+        \item {\bf \TLA}
       \end{itemize}
     \end{column}
     \begin{column}{.5\textwidth}
@@ -324,13 +326,13 @@
   {\Large\bf TLC}
   \par\vspace{2ex}
   \Large
-  Explicit State Model Checker for TLA+
+  Explicit State Model Checker for \TLA
 \end{frame}  
 
 % TLA+ Toolbox
 \begin{frame}[c]
   \centering\Large%
-  \href{https://github.com/tlaplus/tlaplus/releases/}{TLA+ Toolbox} by Simon Zambrovski, et al.\\%
+  \href{https://github.com/tlaplus/tlaplus/releases/}{\TLA\ Toolbox} by Simon Zambrovski, et al.\\%
   \resizebox{\textwidth}{!}{\begin{tikzpicture}[every node/.style={inner sep=0,outer sep=0}]
     \node at (0,0) [anchor=south west]{\includegraphics[keepaspectratio]{tla-toolbox-screenshot.png}};
     \draw[visible on=<2>,red] (1.49,2.50) rectangle (7.47,6.3);
@@ -343,7 +345,7 @@
 \begin{frame}[c]
   \centering\Large%
   \href{https://code.visualstudio.com/download}{VS Code}~/~%
-  \href{https://marketplace.visualstudio.com/items?itemName=alygin.vscode-tlaplus}{TLA+ Support by Андрей Лыгин}%
+  \href{https://marketplace.visualstudio.com/items?itemName=alygin.vscode-tlaplus}{\TLA\ Support by Андрей Лыгин}%
   ~{\href{https://github.com/alygin}{@alygin}}\\%
   \resizebox{\textwidth}{!}{\begin{tikzpicture}[every node/.style={inner sep=0,outer sep=0}]
     \node at (0,0) [anchor=south west]{\includegraphics[keepaspectratio]{tla-vscode-screenshot.png}};
@@ -366,7 +368,7 @@
   \strut\only<1>{~}%
   \only<2>{Алгоритм}%
   \only<3>{Переменные}%
-  \only<4>{Определения TLA+}%
+  \only<4>{Определения \TLA}%
   \only<5>{Процессы}%
   \only<6>{Метки}%
   \\%
@@ -429,7 +431,7 @@
 % TLA+ Toolbox CLI
 \definecolor{shellbgcolor}{rgb}{1,0.99,0.96}
 \begin{frame}[c,fragile]
-  {\centering\Large TLA+ Toolbox CLI\\}
+  {\centering\Large \TLA\ Toolbox CLI\\}
   \begin{tcolorbox}[colback=shellbgcolor,boxrule=.25pt]%
     \scriptsize%
     \begin{Verbatim}[commandchars=\\\{\}]
@@ -906,7 +908,7 @@ State 3: <Rec_1 line 69, col 10 to line 78, col 52 of module 05_ChannelBug>
   \vfill%
   \begin{beamercolorbox}{}
     Amazon Web Services \href{http://lamport.azurewebsites.net/tla/formal-methods-amazon.pdf}{%
-    \textcolor{blue}{успешно использует TLA+}}\textsuperscript{1} с 2011 года\\[2ex]%
+    \textcolor{blue}{успешно использует \TLA\ Tools}}\textsuperscript{1} с 2011 года\\[2ex]%
     \hfill\begin{minipage}{.95\textwidth}
       \normalsize\itshape%
       ``At AWS, formal methods have been a big success. They have helped us prevent subtle, serious bugs
@@ -914,7 +916,7 @@ State 3: <Rec_1 line 69, col 10 to line 78, col 52 of module 05_ChannelBug>
     \end{minipage}
     \strut\\[2ex]
     \onslide<2>{
-    Microsoft использует TLA+%
+    Microsoft использует \TLA\ %
     \href{https://www.microsoft.com/en-us/research/search/?q=TLA\%2B}%
     {\textcolor{blue}{во многих проектах}}\textsuperscript{2},
     включая Azure
@@ -923,8 +925,8 @@ State 3: <Rec_1 line 69, col 10 to line 78, col 52 of module 05_ChannelBug>
     \\[2ex]%
     \hfill\begin{minipage}{.95\textwidth}
       \normalsize\itshape%
-      ``TLA+ is not yet a prerequisite for our hiring. 
-      However, a candidate's knowledge of TLA+ is given significant weight in
+      ``\TLA\ is not yet a prerequisite for our hiring. 
+      However, a candidate's knowledge of \TLA\ is given significant weight in
       our evaluation.  To us, it is a great indicator of those who really care
       about quality and correctness.''
     \end{minipage}%
@@ -1010,7 +1012,7 @@ State 3: <Rec_1 line 69, col 10 to line 78, col 52 of module 05_ChannelBug>
     \end{column}
     \begin{column}{.45\textwidth}
       \href{https://www.apress.com/gp/book/9781484238288}{%
-        {\Large\bf Practical TLA+}\\
+        {\Large\bf Practical \TLA}\\
         {\large\bf Planning Driven Development}\\
         {\normalsize by Hillel Wayne\\Apress, 2018}
       }\\
@@ -1032,12 +1034,12 @@ State 3: <Rec_1 line 69, col 10 to line 78, col 52 of module 05_ChannelBug>
     \begin{column}{.45\textwidth}
       \href{https://lamport.azurewebsites.net/tla/book.html\#download}{%
         {\Large\bf Specifying Systems}\\
-        {\large\bf The TLA+ Language and Tools for Hardware and Software Engineers}\\
+        {\large\bf The \TLA\ Language and Tools for Hardware and Software Engineers}\\
         {\normalsize by Leslie Lamport\\Addison-Wesley Professional, 2002}
       }\\
       \vspace{3ex}
       \large
-      TLA+, обязательно иметь под рукой\\
+      \TLA, обязательно иметь под рукой\\
       \vspace{3ex}
       (последняя версия всегда доступна на сайте Лэмпорта, бесплатно!)
     \end{column}
@@ -1054,13 +1056,13 @@ State 3: <Rec_1 line 69, col 10 to line 78, col 52 of module 05_ChannelBug>
     \end{column}
     \begin{column}{.45\textwidth}
       \href{http://lamport.azurewebsites.net/video/videos.html}{%
-        {\Large\bf TLA+ Video Course}\\
+        {\Large\bf \TLA\ Video Course}\\
         {\normalsize by Leslie Lamport}\\
         {\tiny \nolinkurl{lamport.azurewebsites.net/video/videos.html}}
       }\\
       \vspace{3ex}
       \large
-      3.5 часа TLA+, обязательно посмотреть\\
+      3.5 часа \TLA, обязательно посмотреть\\
       \vspace{3ex}
       (Лэмпорт прекрасный лектор!)
     \end{column}
@@ -1071,11 +1073,11 @@ State 3: <Rec_1 line 69, col 10 to line 78, col 52 of module 05_ChannelBug>
   \centering\large%
   \vfill%
   \begin{beamercolorbox}{}
-    Lamport TLA+ Site: \href{https://lamport.azurewebsites.net/tla/tla.html}{\textcolor{blue}{https://lamport.azurewebsites.net/tla/tla.html}}\\[2ex]
-    Learn TLA+: \href{https://learntla.com/}{\textcolor{blue}{https://learntla.com}}\\[2ex]
+    Lamport \TLA\ Site: \href{https://lamport.azurewebsites.net/tla/tla.html}{\textcolor{blue}{https://lamport.azurewebsites.net/tla/tla.html}}\\[2ex]
+    Learn \TLA: \href{https://learntla.com/}{\textcolor{blue}{https://learntla.com}}\\[2ex]
     google group: \href{https://groups.google.com/forum/\#!forum/tlaplus}{\textcolor{blue}{https://groups.google.com/forum/\#!forum/tlaplus}}\\[2ex]
     reddit: \href{https://www.reddit.com/r/tlaplus/}{\textcolor{blue}{https://www.reddit.com/r/tlaplus/}}\\[2ex]
-    TLA+ Tools: \href{http://www.tlaplus.net/}{\textcolor{blue}{http://www.tlaplus.net/}}
+    \TLA\ Tools: \href{https://github.com/tlaplus/tlaplus}{\textcolor{blue}{https://github.com/tlaplus/tlaplus}}
   \end{beamercolorbox}
   \vfill%
 \end{frame}
